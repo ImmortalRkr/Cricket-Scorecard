@@ -52,16 +52,16 @@
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-slate-300">Who won the toss?</label>
                 <div class="grid grid-cols-2 gap-3">
-                    <button id="toss-win-a" onclick="selectTossWinner('A')" class="py-3 bg-slate-700 rounded-xl font-bold"></button>
-                    <button id="toss-win-b" onclick="selectTossWinner('B')" class="py-3 bg-slate-700 rounded-xl font-bold"></button>
+                    <button id="toss-win-a" onclick="selectTossWinner('A')" class="py-3 bg-slate-700 rounded-xl font-bold text-slate-300"></button>
+                    <button id="toss-win-b" onclick="selectTossWinner('B')" class="py-3 bg-slate-700 rounded-xl font-bold text-slate-300"></button>
                 </div>
             </div>
 
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-slate-300">What did they choose?</label>
                 <div class="grid grid-cols-2 gap-3">
-                    <button id="toss-choice-bat" onclick="selectTossChoice('bat')" class="py-3 bg-slate-700 rounded-xl font-bold">🏏 BAT</button>
-                    <button id="toss-choice-bowl" onclick="selectTossChoice('bowl')" class="py-3 bg-slate-700 rounded-xl font-bold">🥎 BOWL</button>
+                    <button id="toss-choice-bat" onclick="selectTossChoice('bat')" class="py-3 bg-slate-700 rounded-xl font-bold text-slate-300">🏏 BAT</button>
+                    <button id="toss-choice-bowl" onclick="selectTossChoice('bowl')" class="py-3 bg-slate-700 rounded-xl font-bold text-slate-300">🥎 BOWL</button>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
 
         <div id="screen-match" class="screen space-y-4">
             
-            <div id="pdf-container" class="bg-slate-800 p-2 rounded-xl">
+            <div id="pdf-container" class="bg-slate-850 p-3 rounded-xl border border-slate-700">
                 
                 <div id="target-alert-banner" class="hidden bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-lg p-2 text-center mb-2">
                     🎯 TARGET: <span id="target-score-val">0</span> runs needed from <span id="target-balls-val">0</span> balls
@@ -207,7 +207,7 @@
                 <div class="text-xl font-black text-white" id="match-verdict-title">Team Wins!</div>
             </div>
             <button onclick="triggerPdfDownload()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-900 font-black py-4 rounded-xl shadow-lg tracking-wider uppercase text-sm cursor-pointer">📥 Download Final Match PDF</button>
-            <button onclick="window.location.reload()" class="w-full bg-slate-700 text-slate-300 font-bold py-3 rounded-xl text-xs">Start A New Match</button>
+            <button onclick="resetWholeApplication()" class="w-full bg-slate-700 text-slate-300 font-bold py-3 rounded-xl text-xs">Start A New Match</button>
         </div>
 
     </div>
@@ -319,6 +319,8 @@
                 document.getElementById('target-alert-banner').classList.remove('hidden');
                 document.getElementById('target-score-val').innerText = (matchConfig.firstInningsRuns + 1);
                 document.getElementById('target-balls-val').innerText = (matchConfig.totalOvers * 6);
+            } else {
+                document.getElementById('target-alert-banner').classList.add('hidden');
             }
 
             renderScorecard();
@@ -434,18 +436,17 @@
             bowlingSquad[currentBowlerIndex].currentOverBalls += 1;
 
             renderScorecard();
-            evaluateWicketOrReplacement('out');
+            evaluateWicketOrReplacement();
         }
 
         function handleRetireEvent() {
             if(confirm("Declare / Retire active batsman? (They can bat again later)")) {
                 battingSquad[strikerIndex].status = 'retired';
-                evaluateWicketOrReplacement('retired');
+                evaluateWicketOrReplacement();
             }
         }
 
-        function evaluateWicketOrReplacement(reason) {
-            // Available means either 'yet to bat' OR 'retired'
+        function evaluateWicketOrReplacement() {
             let availableBatters = battingSquad.filter(p => p.status === 'yet to bat' || p.status === 'retired');
             
             if (matchScore.wickets >= 10 || availableBatters.length === 0) {
@@ -459,7 +460,6 @@
                 if(p.status === 'yet to bat' || p.status === 'retired') {
                     let opt = document.createElement('option'); 
                     opt.value = idx; 
-                    // Add label helper if they are coming back
                     opt.innerText = p.name + (p.status === 'retired' ? " (Retired)" : ""); 
                     dropdown.appendChild(opt);
                 }
@@ -517,7 +517,6 @@
                 matchConfig.firstInningsRuns = matchScore.runs;
                 matchConfig.currentInnings = 2;
                 
-                // Reset all player statuses for Team B setup
                 playersA.forEach(p => p.status = 'yet to bat');
                 playersB.forEach(p => p.status = 'yet to bat');
                 
@@ -537,19 +536,30 @@
             switchScreen('screen-gameover');
         }
 
+        function resetWholeApplication() {
+            // Full state fallback reset to clear home screen memory hang-ups
+            matchConfig = { teamA: "", teamB: "", totalOvers: 0, tossWinner: "", tossChoice: "", battingTeam: "", bowlingTeam: "", currentInnings: 1, firstInningsRuns: 0 };
+            playersA = []; playersB = []; battingSquad = []; bowlingSquad = [];
+            matchScore = { runs: 0, wickets: 0, balls: 0, extraWd: 0, extraNb: 0, totalExtras: 0 };
+            strikerIndex = -1; nonStrikerIndex = -1; currentBowlerIndex = -1;
+            
+            document.getElementById('setup-team-a').value = "Team A";
+            document.getElementById('setup-team-b').value = "Team B";
+            switchScreen('screen-setup');
+        }
+
         function triggerPdfDownload() {
             const element = document.getElementById('pdf-container');
+            // Simplified rendering configuration parameters to bypass mobile canvas security blocks
             const options = {
-                margin:       6,
-                filename:     'Turf_Scorecard_Summary.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2.5, backgroundColor: '#1e293b', useCORS: true }, 
+                margin:       4,
+                filename:     'Turf_Scorecard.pdf',
+                image:        { type: 'jpeg', quality: 0.95 },
+                html2canvas:  { scale: 2, backgroundColor: '#1e293b' }, 
                 jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
             
-            html2pdf().set(options).from(element).save()
-                .then(() => console.log("PDF download triggered successfully."))
-                .catch(err => alert("PDF Generation Failed: " + err));
+            html2pdf().from(element).set(options).save();
         }
     </script>
 </body>
