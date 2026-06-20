@@ -206,7 +206,6 @@
             <div class="bg-slate-700/50 rounded-xl p-5 border border-slate-600">
                 <div class="text-xl font-black text-white" id="match-verdict-title">Team Wins!</div>
             </div>
-            <p class="text-xs text-slate-400 px-4">You can download the full printable match logs below directly onto your mobile clipboard memory.</p>
             <button onclick="triggerPdfDownload()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-900 font-black py-4 rounded-xl shadow-lg tracking-wider uppercase text-sm cursor-pointer">📥 Download Final Match PDF</button>
             <button onclick="window.location.reload()" class="w-full bg-slate-700 text-slate-300 font-bold py-3 rounded-xl text-xs">Start A New Match</button>
         </div>
@@ -270,7 +269,6 @@
                     battingSquad = playersB; bowlingSquad = playersA.map(p => ({ name: p.name, overs: 0, maidens: 0, runsConceded: 0, wickets: 0, currentOverBalls: 0 }));
                 }
             } else {
-                // Invert for Innings 2
                 let temp = matchConfig.battingTeam;
                 matchConfig.battingTeam = matchConfig.bowlingTeam;
                 matchConfig.bowlingTeam = temp;
@@ -285,9 +283,7 @@
             batterSelects.forEach(id => {
                 let d = document.getElementById(id); d.innerHTML = "";
                 battingSquad.forEach((p, idx) => {
-                    if (p.status === 'yet to bat') {
-                        let opt = document.createElement('option'); opt.value = idx; opt.innerText = p.name; d.appendChild(opt);
-                    }
+                    let opt = document.createElement('option'); opt.value = idx; opt.innerText = p.name; d.appendChild(opt);
                 });
             });
             if(document.getElementById('select-non-striker').options.length > 1) {
@@ -405,12 +401,12 @@
         }
 
         function confirmNoBallRuns(runsOffBat) {
-            matchScore.runs += (1 + runsOffBat); // 1 extra + runs off bat
+            matchScore.runs += (1 + runsOffBat);
             matchScore.totalExtras += 1;
             matchScore.extraNb += 1;
 
             battingSquad[strikerIndex].runs += runsOffBat;
-            battingSquad[strikerIndex].balls += 1; // Facing a no-ball counts as a ball faced
+            battingSquad[strikerIndex].balls += 1;
             if (runsOffBat === 4) battingSquad[strikerIndex].fours += 1;
             if (runsOffBat === 6) battingSquad[strikerIndex].sixes += 1;
 
@@ -442,15 +438,17 @@
         }
 
         function handleRetireEvent() {
-            if(confirm("Declare / Retire active batsman?")) {
+            if(confirm("Declare / Retire active batsman? (They can bat again later)")) {
                 battingSquad[strikerIndex].status = 'retired';
                 evaluateWicketOrReplacement('retired');
             }
         }
 
         function evaluateWicketOrReplacement(reason) {
-            let activeBattersCount = battingSquad.filter(p => p.status === 'yet to bat').length;
-            if (matchScore.wickets >= 10 || activeBattersCount === 0) {
+            // Available means either 'yet to bat' OR 'retired'
+            let availableBatters = battingSquad.filter(p => p.status === 'yet to bat' || p.status === 'retired');
+            
+            if (matchScore.wickets >= 10 || availableBatters.length === 0) {
                 handleInningsEnd();
                 return;
             }
@@ -458,8 +456,12 @@
             let dropdown = document.getElementById('select-next-batter');
             dropdown.innerHTML = "";
             battingSquad.forEach((p, idx) => {
-                if(p.status === 'yet to bat') {
-                    let opt = document.createElement('option'); opt.value = idx; opt.innerText = p.name; dropdown.appendChild(opt);
+                if(p.status === 'yet to bat' || p.status === 'retired') {
+                    let opt = document.createElement('option'); 
+                    opt.value = idx; 
+                    // Add label helper if they are coming back
+                    opt.innerText = p.name + (p.status === 'retired' ? " (Retired)" : ""); 
+                    dropdown.appendChild(opt);
                 }
             });
             switchScreen('modal-batter');
@@ -475,7 +477,6 @@
         function checkMatchStatus() {
             renderScorecard();
 
-            // Innings 2 instant termination criteria
             if (matchConfig.currentInnings === 2) {
                 if (matchScore.runs > matchConfig.firstInningsRuns) {
                     endEntireGame(matchConfig.battingTeam + " Wins the Match! 🏆");
@@ -489,7 +490,6 @@
                 return;
             }
 
-            // Check if over ended
             if (matchScore.balls % 6 === 0 && matchScore.balls > 0 && bowlingSquad[currentBowlerIndex].currentOverBalls > 0) {
                 bowlingSquad[currentBowlerIndex].overs += 1;
                 bowlingSquad[currentBowlerIndex].currentOverBalls = 0;
@@ -517,7 +517,10 @@
                 matchConfig.firstInningsRuns = matchScore.runs;
                 matchConfig.currentInnings = 2;
                 
-                // Reset metrics for second innings
+                // Reset all player statuses for Team B setup
+                playersA.forEach(p => p.status = 'yet to bat');
+                playersB.forEach(p => p.status = 'yet to bat');
+                
                 matchScore = { runs: 0, wickets: 0, balls: 0, extraWd: 0, extraNb: 0, totalExtras: 0 };
                 setupInningsData();
             } else {
@@ -535,7 +538,6 @@
         }
 
         function triggerPdfDownload() {
-            // Target the complete rendering box layout element securely
             const element = document.getElementById('pdf-container');
             const options = {
                 margin:       6,
@@ -545,7 +547,6 @@
                 jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
             
-            // Runs generation
             html2pdf().set(options).from(element).save()
                 .then(() => console.log("PDF download triggered successfully."))
                 .catch(err => alert("PDF Generation Failed: " + err));
