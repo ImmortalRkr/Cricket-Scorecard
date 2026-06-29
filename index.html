@@ -15,6 +15,7 @@
 
     <div class="w-full max-w-md bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-4 mt-1">
         
+        <!-- PHASE 1: MATCH SETUP -->
         <div id="screen-setup" class="screen active space-y-4">
             <h2 class="text-2xl font-black text-emerald-400 text-center tracking-wide">🏏 TURF MATCH SETUP</h2>
             <div>
@@ -41,6 +42,7 @@
             <button onclick="goToTossScreen()" class="w-full bg-emerald-500 text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase cursor-pointer">Proceed to Toss ➔</button>
         </div>
 
+        <!-- PHASE 2: TOSS SCREEN -->
         <div id="screen-toss" class="screen space-y-5">
             <h2 class="text-2xl font-black text-emerald-400 text-center tracking-wide">🪙 THE TOSS</h2>
             <div class="space-y-2">
@@ -60,6 +62,7 @@
             <button onclick="goToOpenersScreen()" class="w-full bg-emerald-500 text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase cursor-pointer">Select Openers ➔</button>
         </div>
 
+        <!-- PHASE 3: SELECT OPENERS SCREEN -->
         <div id="screen-openers" class="screen space-y-4">
             <h2 class="text-2xl font-black text-emerald-400 text-center tracking-wide mb-2">📋 SELECT OPENERS</h2>
             <div>
@@ -77,6 +80,7 @@
             <button onclick="startLiveMatch()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase cursor-pointer">Start Match!</button>
         </div>
 
+        <!-- PHASE 4: LIVE MATCH SCREEN -->
         <div id="screen-match" class="screen space-y-4">
             <div id="pdf-container" class="bg-slate-850 p-2 rounded-xl">
                 <div id="target-alert-banner" class="hidden bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-lg p-2 text-center mb-2">
@@ -89,10 +93,12 @@
                     <div class="text-sm font-semibold text-slate-300">Overs: <span id="live-overs">0.0</span> / <span id="live-max-overs">0</span></div>
                 </div>
 
+                <!-- LIVE OVER BALL LOG DISPLAY TRAY -->
                 <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-2.5 mt-2 flex items-center justify-between gap-2">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recent Balls:</span>
                     <div id="live-recent-balls-tray" class="flex flex-row-reverse gap-1.5 font-bold text-xs overflow-x-auto text-right text-emerald-400">
-                        </div>
+                        <!-- Instantiated by JS engine -->
+                    </div>
                 </div>
 
                 <div class="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden mt-3 text-xs">
@@ -143,6 +149,7 @@
                 </div>
             </div>
 
+            <!-- ACTION CONTROLS -->
             <div class="grid grid-cols-4 gap-2 mt-2 pt-2 border-t border-slate-700">
                 <button onclick="handleBallEvent(0)" class="bg-slate-700 py-3 rounded-xl font-bold active:scale-95 transition">0</button>
                 <button onclick="handleBallEvent(1)" class="bg-slate-700 py-3 rounded-xl font-bold active:scale-95 transition">1</button>
@@ -163,15 +170,16 @@
             </div>
         </div>
 
+        <!-- OUT MODAL -->
         <div id="modal-wicket-type" class="screen space-y-4 py-4">
             <h3 class="text-xl font-bold text-rose-400 text-center">☝️ OUT SELECTION</h3>
-            <p class="text-xs text-slate-300 text-center">What was the dismissal type?</p>
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="confirmStandardWicket()" class="bg-slate-700 py-4 font-bold rounded-xl text-sm">Standard Wicket<br><span class="text-[10px] text-slate-400">(Bowled, Catch, LBW)</span></button>
-                <button onclick="launchRunOutDialog()" class="bg-slate-700 py-4 font-bold rounded-xl text-sm">Run Out<br><span class="text-[10px] text-slate-400">(Stat to Bowler: No)</span></button>
+                <button onclick="launchRunOutDialog()" class="bg-slate-700 py-4 font-bold rounded-xl text-sm">Run Out<br><span class="text-[10px] text-slate-400">(Wicket to Bowler: No)</span></button>
             </div>
         </div>
 
+        <!-- RUN OUT MODAL -->
         <div id="modal-runout-runs" class="screen space-y-4 py-4">
             <h3 class="text-xl font-bold text-amber-400 text-center">🏃 RUN OUT COMPLETED</h3>
             <p class="text-xs text-slate-300 text-center">How many runs were crossed completely before the run out?</p>
@@ -184,6 +192,7 @@
             </div>
         </div>
 
+        <!-- ADDITIONAL CONTROLS -->
         <div id="modal-bowler" class="screen space-y-4 py-4">
             <h3 class="text-xl font-bold text-amber-400 text-center">🥎 OVER COMPLETED!</h3>
             <select id="select-next-bowler" class="w-full bg-slate-700 border border-slate-600 rounded-xl p-3 text-white focus:outline-none"></select>
@@ -205,6 +214,7 @@
             </div>
         </div>
 
+        <!-- CRICBUZZ SUMMARY REPORT CARD SCREEN -->
         <div id="screen-gameover" class="screen space-y-4 py-2">
             <div id="screenshot-area" class="bg-slate-850 p-3 rounded-xl border border-slate-700 space-y-4">
                 <h2 class="text-2xl font-black text-center text-emerald-400 tracking-wide border-b border-slate-700 pb-2">🏆 CRIC-TURF REPORT CARD</h2>
@@ -213,6 +223,7 @@
                     <div class="text-base font-black text-white" id="final-verdict-title">-</div>
                 </div>
 
+                <!-- INNINGS 1 DATA -->
                 <div class="space-y-2 border-b border-slate-700 pb-3">
                     <div class="flex justify-between font-black text-sm text-amber-400">
                         <span id="f-i1-teamname">Team 1</span>
@@ -225,6 +236,7 @@
                     <div id="f-i1-bowling-table" class="space-y-1"></div>
                 </div>
 
+                <!-- INNINGS 2 DATA -->
                 <div class="space-y-2">
                     <div class="flex justify-between font-black text-sm text-amber-400">
                         <span id="f-i2-teamname">Team 2</span>
@@ -249,16 +261,14 @@
     </div>
 
     <script>
-        // Global State Structures
         let matchConfig = { teamA: "", teamB: "", totalOvers: 0, tossWinner: "", tossChoice: "", battingTeam: "", bowlingTeam: "", currentInnings: 1, firstInningsRuns: 0 };
         let playersA = [], playersB = [];
         let battingSquad = [], bowlingSquad = [];
         let matchScore = { runs: 0, wickets: 0, balls: 0, extraWd: 0, extraNb: 0, totalExtras: 0 };
         let strikerIndex = -1, nonStrikerIndex = -1, currentBowlerIndex = -1;
         
-        let recentBallsArray = []; // Live over ticker values array
-        let mementoHistoryStack = []; // Core undo logging structural history state arrays array
-
+        let recentBallsArray = [];
+        let mementoHistoryStack = [];
         let finalReportData = { i1: {}, i2: {} };
 
         function saveMatchMementoState() {
@@ -275,11 +285,8 @@
         }
 
         function handleUndoEngineClick() {
-            if (mementoHistoryStack.length === 0) {
-                alert("No deliveries logged yet in this innings!"); return;
-            }
+            if (mementoHistoryStack.length === 0) { alert("No deliveries logged yet in this innings!"); return; }
             let priorState = mementoHistoryStack.pop();
-            
             matchScore = priorState.matchScore;
             strikerIndex = priorState.strikerIndex;
             nonStrikerIndex = priorState.nonStrikerIndex;
@@ -287,10 +294,8 @@
             recentBallsArray = priorState.recentBallsArray;
             battingSquad = priorState.battingSquadClone;
             bowlingSquad = priorState.bowlingSquadClone;
-
             renderScorecard();
             renderRecentBallsTrayWidget();
-            alert("Last delivery reversed successfully!");
         }
 
         function switchScreen(screenId) {
@@ -402,25 +407,16 @@
         function renderRecentBallsTrayWidget() {
             let container = document.getElementById('live-recent-balls-tray');
             container.innerHTML = "";
-            
-            // Slice the final 6 entries from our historical queue string log tracker
             let displayList = recentBallsArray.slice(-6);
             if(displayList.length === 0) {
-                container.innerHTML = "<span class='text-slate-500 font-normal italic'>Start over...</span>";
-                return;
+                container.innerHTML = "<span class='text-slate-500 font-normal italic'>Start over...</span>"; return;
             }
             displayList.forEach(val => {
-                let element = document.createElement('span');
-                element.innerText = val;
-                if(val === '|') {
-                    element.className = "text-slate-500 font-black px-0.5";
-                } else if(val.includes('W')) {
-                    element.className = "bg-rose-600 text-white rounded px-1.5 py-0.5 text-[10px]";
-                } else if (val === '4' || val === '6') {
-                    element.className = "bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded px-1 py-0.5";
-                } else {
-                    element.className = "text-slate-300 bg-slate-700/50 rounded px-1 py-0.5";
-                }
+                let element = document.createElement('span'); element.innerText = val;
+                if(val === '|') { element.className = "text-slate-500 font-black px-0.5"; }
+                else if(val.includes('W')) { element.className = "bg-rose-600 text-white rounded px-1.5 py-0.5 text-[10px]"; }
+                else if (val === '4' || val === '6') { element.className = "bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded px-1 py-0.5"; }
+                else { element.className = "text-slate-300 bg-slate-700/50 rounded px-1 py-0.5"; }
                 container.appendChild(element);
             });
         }
@@ -472,34 +468,25 @@
 
         function handleBallEvent(runsScored) {
             saveMatchMementoState();
-
             matchScore.runs += runsScored; matchScore.balls += 1;
             battingSquad[strikerIndex].runs += runsScored; battingSquad[strikerIndex].balls += 1;
             if (runsScored === 4) battingSquad[strikerIndex].fours += 1;
             if (runsScored === 6) battingSquad[strikerIndex].sixes += 1;
-            
             bowlingSquad[currentBowlerIndex].runsConceded += runsScored;
             bowlingSquad[currentBowlerIndex].currentOverBalls += 1;
             bowlingSquad[currentBowlerIndex].currentOverRuns += runsScored;
-
             recentBallsArray.push(runsScored.toString());
             renderRecentBallsTrayWidget();
-
             if (runsScored === 1 || runsScored === 3) rotateStrikeManual();
             checkMatchStatus();
         }
 
         function handleExtraEvent(type) {
             saveMatchMementoState();
-
             matchScore.runs += 1; matchScore.totalExtras += 1;
             bowlingSquad[currentBowlerIndex].runsConceded += 1;
             bowlingSquad[currentBowlerIndex].currentOverRuns += 1;
-            
-            if (type === 'wd') {
-                matchScore.extraWd += 1;
-                recentBallsArray.push("Wd");
-            }
+            if (type === 'wd') { matchScore.extraWd += 1; recentBallsArray.push("Wd"); }
             renderRecentBallsTrayWidget();
             checkMatchStatus();
         }
@@ -508,18 +495,14 @@
 
         function confirmNoBallRuns(runsOffBat) {
             saveMatchMementoState();
-
             matchScore.runs += (1 + runsOffBat); matchScore.totalExtras += 1; matchScore.extraNb += 1;
             battingSquad[strikerIndex].runs += runsOffBat; battingSquad[strikerIndex].balls += 1;
             if (runsOffBat === 4) battingSquad[strikerIndex].fours += 1;
             if (runsOffBat === 6) battingSquad[strikerIndex].sixes += 1;
-            
             bowlingSquad[currentBowlerIndex].runsConceded += (1 + runsOffBat);
             bowlingSquad[currentBowlerIndex].currentOverRuns += (1 + runsOffBat);
-
             recentBallsArray.push(`Nb+${runsOffBat}`);
             renderRecentBallsTrayWidget();
-            
             if (runsOffBat === 1 || runsOffBat === 3) rotateStrikeManual();
             switchScreen('screen-match');
             checkMatchStatus();
@@ -530,53 +513,36 @@
             renderScorecard();
         }
 
-        function handleWicketDialog() {
-            switchScreen('modal-wicket-type');
-        }
+        function handleWicketDialog() { switchScreen('modal-wicket-type'); }
 
         function confirmStandardWicket() {
             saveMatchMementoState();
-
             matchScore.wickets += 1; matchScore.balls += 1;
             battingSquad[strikerIndex].balls += 1;
             battingSquad[strikerIndex].status = 'out';
-            battingSquad[strikerIndex].modeDismissal = `b ${bowlingSquad[currentBowlerIndex].name}`;
-            
+            battingSquad[strikerIndex].modeDismissal = `out (b ${bowlingSquad[currentBowlerIndex].name})`;
             bowlingSquad[currentBowlerIndex].wickets += 1;
             bowlingSquad[currentBowlerIndex].currentOverBalls += 1;
-
             recentBallsArray.push("W");
             renderRecentBallsTrayWidget();
-            
             switchScreen('screen-match');
             renderScorecard();
             evaluateWicketOrReplacement();
         }
 
-        function launchRunOutDialog() {
-            switchScreen('modal-runout-runs');
-        }
+        function launchRunOutDialog() { switchScreen('modal-runout-runs'); }
 
         function confirmRunOutDismissal(runsScoredBeforeOut) {
             saveMatchMementoState();
-
-            // Run out attributes
-            matchScore.runs += runsScoredBeforeOut;
-            matchScore.wickets += 1; 
-            matchScore.balls += 1;
-
-            battingSquad[strikerIndex].runs += runsScoredBeforeOut;
-            battingSquad[strikerIndex].balls += 1;
+            matchScore.runs += runsScoredBeforeOut; matchScore.wickets += 1; matchScore.balls += 1;
+            battingSquad[strikerIndex].runs += runsScoredBeforeOut; battingSquad[strikerIndex].balls += 1;
             battingSquad[strikerIndex].status = 'out';
             battingSquad[strikerIndex].modeDismissal = "Run Out";
-
             bowlingSquad[currentBowlerIndex].runsConceded += runsScoredBeforeOut;
             bowlingSquad[currentBowlerIndex].currentOverBalls += 1;
             bowlingSquad[currentBowlerIndex].currentOverRuns += runsScoredBeforeOut;
-
             recentBallsArray.push(runsScoredBeforeOut > 0 ? `R.Out(+${runsScoredBeforeOut})` : "W(RO)");
             renderRecentBallsTrayWidget();
-
             switchScreen('screen-match');
             renderScorecard();
             evaluateWicketOrReplacement();
@@ -626,21 +592,14 @@
             if (matchScore.balls >= maxTotalBalls) {
                 handleInningsEnd(); return;
             }
-            
-            // Check over end parameters
             if (matchScore.balls % 6 === 0 && matchScore.balls > 0 && bowlingSquad[currentBowlerIndex].currentOverBalls > 0) {
-                // Check if over was a maiden over
-                if (bowlingSquad[currentBowlerIndex].currentOverRuns === 0) {
-                    bowlingSquad[currentBowlerIndex].maidens += 1;
-                }
-                bowlingSquad[currentBowlerIndex].overs += 1; 
+                if (bowlingSquad[currentBowlerIndex].currentOverRuns === 0) { bowlingSquad[currentBowlerIndex].maidens += 1; }
+                bowlingSquad[currentBowlerIndex].overs += 1;
                 bowlingSquad[currentBowlerIndex].currentOverBalls = 0;
                 bowlingSquad[currentBowlerIndex].currentOverRuns = 0;
-
-                recentBallsArray.push("|"); // Append terminal structural breaker character
+                recentBallsArray.push("|");
                 renderRecentBallsTrayWidget();
                 rotateStrikeManual();
-
                 let dropdown = document.getElementById('select-next-bowler');
                 dropdown.innerHTML = "";
                 bowlingSquad.forEach((p, idx) => {
@@ -657,40 +616,31 @@
         }
 
         function handleInningsEnd() {
-            // Handle mid-over over data updates if innings closes abruptly
             if (bowlingSquad[currentBowlerIndex].currentOverBalls > 0) {
                 let currentFractionalBalls = bowlingSquad[currentBowlerIndex].currentOverBalls;
                 bowlingSquad[currentBowlerIndex].overs += (currentFractionalBalls / 6);
             }
-
             let scoreRepresentation = `${matchScore.runs}/${matchScore.wickets} (${Math.floor(matchScore.balls / 6)}.${matchScore.balls % 6} Ov)`;
-            
             let finalInningsBattingDataset = JSON.parse(JSON.stringify(battingSquad));
             let finalInningsBowlingDataset = JSON.parse(JSON.stringify(bowlingSquad));
 
             if (matchConfig.currentInnings === 1) {
                 finalReportData.i1 = { teamName: matchConfig.battingTeam, scoreStr: scoreRepresentation, batters: finalInningsBattingDataset, bowlers: finalInningsBowlingDataset };
                 alert(`Innings 1 Finished! Target: ${matchScore.runs + 1}`);
-                
                 matchConfig.firstInningsRuns = matchScore.runs;
                 matchConfig.currentInnings = 2;
-                
                 playersA.forEach(p => p.status = 'yet to bat');
                 playersB.forEach(p => p.status = 'yet to bat');
-                
                 matchScore = { runs: 0, wickets: 0, balls: 0, extraWd: 0, extraNb: 0, totalExtras: 0 };
                 setupInningsData();
             } else {
                 finalReportData.i2 = { teamName: matchConfig.battingTeam, scoreStr: scoreRepresentation, batters: finalInningsBattingDataset, bowlers: finalInningsBowlingDataset };
-                
                 let finalVerdict = "";
                 if (matchScore.runs > matchConfig.firstInningsRuns) {
                     finalVerdict = `🎉 ${matchConfig.battingTeam} Won by ${10 - matchScore.wickets} Wickets!`;
                 } else if (matchScore.runs < matchConfig.firstInningsRuns) {
                     finalVerdict = `🎉 ${matchConfig.bowlingTeam} Won by ${matchConfig.firstInningsRuns - matchScore.runs} Runs!`;
-                } else {
-                    finalVerdict = "🤝 Match Tied!";
-                }
+                } else { finalVerdict = "🤝 Match Tied!"; }
                 endEntireGame(finalVerdict);
             }
         }
@@ -738,7 +688,6 @@
 
         function endEntireGame(verdictText) {
             document.getElementById('final-verdict-title').innerText = verdictText;
-            
             document.getElementById('f-i1-teamname').innerText = finalReportData.i1.teamName;
             document.getElementById('f-i1-score').innerText = finalReportData.i1.scoreStr;
             renderSummaryTableRows(finalReportData.i1, 'f-i1-batting-table', 'f-i1-bowling-table');
@@ -746,7 +695,6 @@
             document.getElementById('f-i2-teamname').innerText = finalReportData.i2.teamName;
             document.getElementById('f-i2-score').innerText = finalReportData.i2.scoreStr;
             renderSummaryTableRows(finalReportData.i2, 'f-i2-batting-table', 'f-i2-bowling-table');
-
             switchScreen('screen-gameover');
         }
 
@@ -756,7 +704,6 @@
             matchScore = { runs: 0, wickets: 0, balls: 0, extraWd: 0, extraNb: 0, totalExtras: 0 };
             strikerIndex = -1; nonStrikerIndex = -1; currentBowlerIndex = -1;
             recentBallsArray = []; mementoHistoryStack = [];
-            
             document.getElementById('setup-team-a').value = "Team A";
             document.getElementById('setup-team-b').value = "Team B";
             switchScreen('screen-setup');
